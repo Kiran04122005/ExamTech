@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ExamTech - Registration</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .register-container {
+            width: 400px;
+            background: white;
+            padding: 35px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 8px;
+            color: #2563eb;
+            font-size: 30px;
+            font-weight: bold;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 25px;
+            font-size: 15px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 15px;
+            outline: none;
+            background: white;
+        }
+
+        input:focus {
+            border-color: #2563eb;
+        }
+
+        .register-btn {
+            width: 100%;
+            padding: 13px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .register-btn:hover {
+            background: #1d4ed8;
+        }
+
+        .message {
+            text-align: center;
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .success {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .error {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+        }
+
+        .login-link a {
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 500px) {
+            .register-container {
+                width: 90%;
+                padding: 28px 22px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="register-container">
+
+        <div class="logo">ExamTech</div>
+
+        <div class="subtitle">
+            Online Exam Portal
+        </div>
+
+        <!-- Success Message -->
+        <div th:if="${success}"
+             class="message success"
+             th:text="${success}">
+        </div>
+
+        <!-- Error Message -->
+        <div th:if="${error}"
+             class="message error"
+             th:text="${error}">
+        </div>
+
+        <!-- Registration Form -->
+        <form th:action="@{/register}"
+              th:object="${user}"
+              method="post"
+              autocomplete="off">
+
+            <!-- Full Name -->
+            <div class="form-group">
+
+                <label for="name">
+                    Full Name
+                </label>
+
+                <input type="text"
+                       id="name"
+                       th:field="*{name}"
+                       placeholder="Enter your full name"
+                       autocomplete="new-password"
+                       required>
+
+            </div>
+
+            <!-- Email -->
+            <div class="form-group">
+
+                <label for="email">
+                    Email
+                </label>
+
+                <input type="email"
+                       id="email"
+                       th:field="*{email}"
+                       placeholder="Enter your email"
+                       autocomplete="new-password"
+                       required>
+
+            </div>
+
+            <!-- Password -->
+            <div class="form-group">
+
+                <label for="password">
+                    Password
+                </label>
+
+                <input type="password"
+                       id="password"
+                       th:field="*{password}"
+                       placeholder="Create a password"
+                       autocomplete="new-password"
+                       required>
+
+            </div>
+
+            <button type="submit" class="register-btn">
+                Create Account
+            </button>
+
+        </form>
+
+        <div class="login-link">
+            Already have an account?
+            <a href="/login">Login</a>
+        </div>
+
+    </div>
+
+    <!-- Clear browser-restored registration values -->
+    <script>
+        window.addEventListener("pageshow", function () {
+
+            setTimeout(function () {
+
+                const nameField =
+                    document.getElementById("name");
+
+                const emailField =
+                    document.getElementById("email");
+
+                const passwordField =
+                    document.getElementById("password");
+
+                if (nameField) {
+                    nameField.value = "";
+                }
+
+                if (emailField) {
+                    emailField.value = "";
+                }
+
+                if (passwordField) {
+                    passwordField.value = "";
+                }
+
+            }, 300);
+
+        });
+    </script>
+
+</body>
+
+</html>

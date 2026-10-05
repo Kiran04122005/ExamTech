@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ExamTech - Create Exam</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f4f7fb;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: #2563eb;
+            color: white;
+            padding: 18px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar h1 {
+            font-size: 28px;
+        }
+
+        .back {
+            color: white;
+            text-decoration: none;
+            background: #1d4ed8;
+            padding: 10px 20px;
+            border-radius: 8px;
+        }
+
+        .container {
+            max-width: 750px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 35px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .card h2 {
+            color: #1e3a8a;
+            margin-bottom: 10px;
+        }
+
+        .card .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 7px;
+            font-size: 15px;
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        input:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #2563eb;
+        }
+
+        .row {
+            display: flex;
+            gap: 20px;
+        }
+
+        .row .form-group {
+            flex: 1;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        .checkbox-group input {
+            width: auto;
+        }
+
+        .checkbox-group label {
+            margin: 0;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            border: none;
+            padding: 12px 25px;
+            border-radius: 7px;
+            font-size: 15px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: #2563eb;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1d4ed8;
+        }
+
+        .btn-secondary {
+            background: #e5e7eb;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background: #d1d5db;
+        }
+
+        @media (max-width: 600px) {
+            .row {
+                flex-direction: column;
+                gap: 0;
+            }
+
+            .navbar {
+                padding: 15px 20px;
+            }
+
+            .card {
+                padding: 25px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="navbar">
+
+        <h1>ExamTech</h1>
+
+        <a href="/examiner/dashboard" class="back">
+            Back to Dashboard
+        </a>
+
+    </div>
+
+
+    <div class="container">
+
+        <div class="card">
+
+            <h2>Create New Examination</h2>
+
+            <p class="subtitle">
+                Enter the examination details below.
+            </p>
+
+
+            <form action="/examiner/create-exam" method="post">
+
+                <!-- Exam Title -->
+
+                <div class="form-group">
+
+                    <label for="title">
+                        Exam Title
+                    </label>
+
+                    <input
+                        type="text"
+                        id="title"
+                        name="title"
+                        placeholder="Enter exam title"
+                        required>
+
+                </div>
+
+
+                <!-- Description -->
+
+                <div class="form-group">
+
+                    <label for="description">
+                        Description
+                    </label>
+
+                    <textarea
+                        id="description"
+                        name="description"
+                        placeholder="Enter exam description"
+                        required></textarea>
+
+                </div>
+
+
+                <!-- Duration and Marks -->
+
+                <div class="row">
+
+                    <div class="form-group">
+
+                        <label for="durationMinutes">
+                            Duration (Minutes)
+                        </label>
+
+                        <input
+                            type="number"
+                            id="durationMinutes"
+                            name="durationMinutes"
+                            min="1"
+                            placeholder="Example: 60"
+                            required>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="totalMarks">
+                            Total Marks
+                        </label>
+
+                        <input
+                            type="number"
+                            id="totalMarks"
+                            name="totalMarks"
+                            min="1"
+                            placeholder="Example: 50"
+                            required>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Active Exam -->
+
+                <div class="checkbox-group">
+
+                    <input
+                        type="checkbox"
+                        id="active"
+                        name="active"
+                        value="true"
+                        checked>
+
+                    <label for="active">
+                        Make this exam active
+                    </label>
+
+                </div>
+
+
+                <!-- Buttons -->
+
+                <div class="buttons">
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary">
+                        Create Exam
+                    </button>
+
+                    <a
+                        href="/examiner/dashboard"
+                        class="btn btn-secondary">
+                        Cancel
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>

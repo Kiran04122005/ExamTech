@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ExamTech - Examiner Dashboard</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f4f7fb;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: #2563eb;
+            color: white;
+            padding: 18px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar h1 {
+            font-size: 28px;
+        }
+
+        .logout {
+            background: #1d4ed8;
+            color: white;
+            padding: 10px 22px;
+            border-radius: 8px;
+            text-decoration: none;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .welcome {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+        }
+
+        .welcome h2 {
+            color: #1e3a8a;
+            margin-bottom: 10px;
+        }
+
+        .actions {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .action-card {
+            background: white;
+            flex: 1;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+
+        .action-card h3 {
+            color: #2563eb;
+            margin-bottom: 10px;
+        }
+
+        .action-card p {
+            color: #555;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            display: inline-block;
+            background: #2563eb;
+            color: white;
+            padding: 11px 20px;
+            border-radius: 7px;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background: #1d4ed8;
+        }
+
+        .exam-section {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+
+        .exam-section h2 {
+            color: #1e3a8a;
+            margin-bottom: 20px;
+        }
+
+        .empty-message {
+            color: #666;
+            padding: 20px 0;
+        }
+
+        /* Exam card */
+
+        .exam-card {
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 22px;
+            margin-bottom: 18px;
+            background: #fafcff;
+        }
+
+        .exam-card h3 {
+            color: #2563eb;
+            margin-bottom: 10px;
+            font-size: 21px;
+        }
+
+        .exam-description {
+            color: #555;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .exam-details {
+            display: flex;
+            gap: 25px;
+            flex-wrap: wrap;
+            margin-bottom: 18px;
+        }
+
+        .detail {
+            color: #444;
+        }
+
+        .detail strong {
+            color: #1e3a8a;
+        }
+
+        .status-active {
+            color: #15803d;
+            font-weight: bold;
+        }
+
+        .status-inactive {
+            color: #dc2626;
+            font-weight: bold;
+        }
+
+        .exam-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn-edit {
+            background: #2563eb;
+        }
+
+        .btn-delete {
+            background: #dc2626;
+        }
+
+        .btn-delete:hover {
+            background: #b91c1c;
+        }
+
+        @media (max-width: 700px) {
+
+            .actions {
+                flex-direction: column;
+            }
+
+            .navbar {
+                padding: 15px 20px;
+            }
+
+            .container {
+                margin: 25px auto;
+            }
+
+            .exam-details {
+                flex-direction: column;
+                gap: 8px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="navbar">
+
+        <h1>ExamTech</h1>
+
+        <a href="/logout" class="logout">
+            Logout
+        </a>
+
+    </div>
+
+
+    <div class="container">
+
+        <!-- Welcome Section -->
+
+        <div class="welcome">
+
+            <h2>Welcome, Examiner!</h2>
+
+            <p>
+                Manage examinations, create questions, maintain the question bank,
+                and evaluate candidate responses.
+            </p>
+
+        </div>
+
+
+        <!-- Action Cards -->
+
+        <div class="actions">
+
+            <div class="action-card">
+
+                <h3>Create Exam</h3>
+
+                <p>
+                    Create a new examination with title, description,
+                    duration and total marks.
+                </p>
+
+                <a href="/examiner/create-exam" class="btn">
+                    Create Exam
+                </a>
+
+            </div>
+
+
+            <div class="action-card">
+
+                <h3>Question Bank</h3>
+
+                <p>
+                    Create and manage MCQ, short-answer and essay questions.
+                </p>
+
+                <a href="/examiner/questions" class="btn">
+                    Question Bank
+                </a>
+
+            </div>
+
+
+            <div class="action-card">
+
+                <h3>Evaluate Answers</h3>
+
+                <p>
+                    Review candidate answers and provide marks and feedback.
+                </p>
+
+                <a href="/examiner/evaluate" class="btn">
+                    Evaluate
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- Examination Section -->
+
+        <div class="exam-section">
+
+            <h2>My Examinations</h2>
+
+
+            <!-- Display exams when exams exist -->
+
+            <div th:if="${exams != null and !exams.isEmpty()}">
+
+                <div class="exam-card" th:each="exam : ${exams}">
+
+                    <h3 th:text="${exam.title}">
+                        Exam Title
+                    </h3>
+
+
+                    <p class="exam-description"
+                       th:text="${exam.description}">
+                        Exam description
+                    </p>
+
+
+                    <div class="exam-details">
+
+                        <div class="detail">
+                            <strong>Duration:</strong>
+                            <span th:text="${exam.durationMinutes}">
+                                60
+                            </span>
+                            minutes
+                        </div>
+
+
+                        <div class="detail">
+                            <strong>Total Marks:</strong>
+                            <span th:text="${exam.totalMarks}">
+                                50
+                            </span>
+                        </div>
+
+
+                        <div class="detail">
+
+                            <strong>Status:</strong>
+
+                            <span th:if="${exam.active}"
+                                  class="status-active">
+                                Active
+                            </span>
+
+                            <span th:unless="${exam.active}"
+                                  class="status-inactive">
+                                Inactive
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Exam actions -->
+
+                    <div class="exam-actions">
+
+                        <a th:href="@{/examiner/edit-exam/{id}(id=${exam.id})}"
+                           class="btn btn-edit">
+                            Edit
+                        </a>
+
+
+                        <a th:href="@{/examiner/delete-exam/{id}(id=${exam.id})}"
+                           class="btn btn-delete"
+                           onclick="return confirm('Are you sure you want to delete this examination?');">
+                            Delete
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Display message when there are no exams -->
+
+            <div th:if="${exams == null or exams.isEmpty()}">
+
+                <p class="empty-message">
+                    No examinations have been created yet.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+</html>

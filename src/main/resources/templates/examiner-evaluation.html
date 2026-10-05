@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>ExamTech - Evaluate Exam</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f4f7fb;
+            min-height: 100vh;
+        }
+
+        /* ================= NAVBAR ================= */
+
+        .navbar {
+            background: #2563eb;
+            color: white;
+
+            padding: 18px 40px;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .nav-button {
+            background: #1d4ed8;
+            color: white;
+
+            text-decoration: none;
+
+            padding: 10px 20px;
+
+            border-radius: 7px;
+        }
+
+        /* ================= CONTAINER ================= */
+
+        .container {
+            max-width: 1100px;
+
+            margin: 40px auto;
+
+            padding: 0 20px;
+        }
+
+        /* ================= HEADER ================= */
+
+        .header {
+            background: white;
+
+            padding: 30px;
+
+            border-radius: 15px;
+
+            box-shadow:
+                0 5px 15px rgba(0, 0, 0, 0.08);
+
+            margin-bottom: 25px;
+        }
+
+        .header h1 {
+            color: #1e3a8a;
+
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #555;
+
+            line-height: 1.6;
+        }
+
+        /* ================= RESULT SUMMARY ================= */
+
+        .summary {
+            background: white;
+
+            padding: 30px;
+
+            border-radius: 15px;
+
+            box-shadow:
+                0 5px 15px rgba(0, 0, 0, 0.08);
+
+            margin-bottom: 25px;
+        }
+
+        .summary h2 {
+            color: #2563eb;
+
+            margin-bottom: 20px;
+        }
+
+        .details {
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, 1fr);
+
+            gap: 15px;
+        }
+
+        .detail {
+            background: #f4f7fb;
+
+            padding: 18px;
+
+            border-radius: 8px;
+        }
+
+        .detail strong {
+            display: block;
+
+            color: #1e3a8a;
+
+            margin-bottom: 7px;
+        }
+
+        .detail span {
+            color: #444;
+        }
+
+        /* ================= QUESTION CARD ================= */
+
+        .question-card {
+            background: white;
+
+            padding: 30px;
+
+            border-radius: 15px;
+
+            box-shadow:
+                0 5px 15px rgba(0, 0, 0, 0.08);
+
+            margin-bottom: 20px;
+        }
+
+        .question-number {
+            color: #2563eb;
+
+            font-weight: bold;
+
+            margin-bottom: 10px;
+        }
+
+        .question-text {
+            font-size: 18px;
+
+            color: #222;
+
+            line-height: 1.6;
+
+            margin-bottom: 15px;
+        }
+
+        .question-info {
+            color: #666;
+
+            margin-bottom: 20px;
+        }
+
+        /* ================= ANSWER ================= */
+
+        .answer-box {
+            background: #f8fafc;
+
+            border-left: 4px solid #2563eb;
+
+            padding: 20px;
+
+            border-radius: 8px;
+
+            margin-bottom: 20px;
+        }
+
+        .answer-box h4 {
+            color: #1e3a8a;
+
+            margin-bottom: 10px;
+        }
+
+        .student-answer {
+            color: #333;
+
+            line-height: 1.7;
+
+            white-space: pre-wrap;
+        }
+
+        /* ================= EVALUATION ================= */
+
+        .evaluation-box {
+            background: #fff7ed;
+
+            border: 1px solid #fed7aa;
+
+            padding: 20px;
+
+            border-radius: 10px;
+        }
+
+        .evaluation-box label {
+            display: block;
+
+            font-weight: bold;
+
+            color: #1e3a8a;
+
+            margin-bottom: 8px;
+        }
+
+        .marks-input {
+            width: 120px;
+
+            padding: 10px;
+
+            border: 1px solid #ccc;
+
+            border-radius: 6px;
+
+            font-size: 16px;
+
+            margin-bottom: 15px;
+        }
+
+        .feedback-input {
+            width: 100%;
+
+            min-height: 100px;
+
+            resize: vertical;
+
+            padding: 12px;
+
+            border: 1px solid #ccc;
+
+            border-radius: 6px;
+
+            font-size: 15px;
+        }
+
+        /* ================= AUTO EVALUATED ================= */
+
+        .auto-evaluated {
+            background: #ecfdf5;
+
+            border: 1px solid #a7f3d0;
+
+            padding: 15px;
+
+            border-radius: 8px;
+
+            color: #166534;
+
+            margin-top: 15px;
+        }
+
+        /* ================= BUTTON ================= */
+
+        .button-area {
+            display: flex;
+
+            gap: 12px;
+
+            margin-top: 25px;
+        }
+
+        .save-button {
+            background: #2563eb;
+
+            color: white;
+
+            border: none;
+
+            padding: 13px 25px;
+
+            border-radius: 7px;
+
+            font-size: 16px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+        }
+
+        .save-button:hover {
+            background: #1d4ed8;
+        }
+
+        .back-button {
+            display: inline-block;
+
+            background: #64748b;
+
+            color: white;
+
+            text-decoration: none;
+
+            padding: 13px 25px;
+
+            border-radius: 7px;
+
+            font-weight: bold;
+        }
+
+        /* ================= MOBILE ================= */
+
+        @media (max-width: 800px) {
+
+            .details {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 600px) {
+
+            .details {
+                grid-template-columns: 1fr;
+            }
+
+            .navbar {
+                padding: 15px 20px;
+            }
+
+            .container {
+                padding: 0 10px;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+    <!-- ================= NAVBAR ================= -->
+
+    <div class="navbar">
+
+        <div class="logo">
+            ExamTech
+        </div>
+
+        <div class="nav-buttons">
+
+            <a href="/examiner/dashboard"
+               class="nav-button">
+                Dashboard
+            </a>
+
+            <a href="/logout"
+               class="nav-button">
+                Logout
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= MAIN ================= -->
+
+    <div class="container">
+
+
+        <!-- ================= HEADER ================= -->
+
+        <div class="header">
+
+            <h1>
+                Review &amp; Evaluate
+            </h1>
+
+            <p>
+                Review the candidate's examination
+                submission and evaluate short-answer
+                and essay responses.
+            </p>
+
+        </div>
+
+
+        <!-- ================= SUMMARY ================= -->
+
+        <div class="summary">
+
+            <h2
+                th:text="${result.exam.title}">
+                Java Programming
+            </h2>
+
+            <div class="details">
+
+                <div class="detail">
+
+                    <strong>
+                        Student
+                    </strong>
+
+                    <span
+                        th:text="${result.studentName}">
+                        Student Name
+                    </span>
+
+                </div>
+
+
+                <div class="detail">
+
+                    <strong>
+                        Objective Marks
+                    </strong>
+
+                    <span
+                        th:text="${result.objectiveMarks}">
+                        0
+                    </span>
+
+                </div>
+
+
+                <div class="detail">
+
+                    <strong>
+                        Current Marks
+                    </strong>
+
+                    <span
+                        th:text="${result.totalMarksObtained}">
+                        0
+                    </span>
+
+                </div>
+
+
+                <div class="detail">
+
+                    <strong>
+                        Maximum Marks
+                    </strong>
+
+                    <span
+                        th:text="${result.maximumMarks}">
+                        20
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================= EVALUATION FORM ================= -->
+
+        <form
+            th:action="@{/examiner/evaluate/{id}/save(id=${result.id})}"
+            method="post">
+
+
+            <!-- ================= ANSWERS ================= -->
+
+            <div
+                th:each="answer, answerStat : ${answers}"
+                class="question-card">
+
+
+                <!-- QUESTION NUMBER -->
+
+                <div class="question-number">
+
+                    Question
+                    <span
+                        th:text="${answerStat.count}">
+                        1
+                    </span>
+
+                </div>
+
+
+                <!-- QUESTION -->
+
+                <div class="question-text">
+
+                    <span
+                        th:text="${answer.question.questionText}">
+                        Question text
+                    </span>
+
+                </div>
+
+
+                <!-- QUESTION TYPE / MARKS -->
+
+                <div class="question-info">
+
+                    Type:
+                    <strong
+                        th:text="${answer.question.type}">
+                        SHORT_ANSWER
+                    </strong>
+
+                    &nbsp; | &nbsp;
+
+                    Maximum Marks:
+                    <strong
+                        th:text="${answer.question.marks}">
+                        5
+                    </strong>
+
+                </div>
+
+
+                <!-- STUDENT ANSWER -->
+
+                <div class="answer-box">
+
+                    <h4>
+                        Student Answer
+                    </h4>
+
+                    <div class="student-answer"
+                         th:text="${answer.studentAnswer}">
+                        Student answer appears here.
+                    </div>
+
+                </div>
+
+
+                <!-- ================= MCQ ================= -->
+
+                <div
+                    th:if="${answer.question.type.equalsIgnoreCase('MCQ')}"
+                    class="auto-evaluated">
+
+                    <strong>
+                        Automatically Evaluated
+                    </strong>
+
+                    <br><br>
+
+                    Marks Awarded:
+
+                    <strong
+                        th:text="${answer.marksAwarded}">
+                        0
+                    </strong>
+
+                    /
+
+                    <strong
+                        th:text="${answer.question.marks}">
+                        1
+                    </strong>
+
+                </div>
+
+
+                <!-- ================= SHORT / ESSAY ================= -->
+
+                <div
+                    th:if="${answer.question.type.equalsIgnoreCase('SHORT_ANSWER')
+                            or answer.question.type.equalsIgnoreCase('ESSAY')}"
+                    class="evaluation-box">
+
+
+                    <label
+                        th:for="'marks_' + ${answer.id}">
+
+                        Marks Awarded
+
+                    </label>
+
+
+                    <input
+                        class="marks-input"
+                        type="number"
+                        min="0"
+                        th:max="${answer.question.marks}"
+                        th:name="'marks_' + ${answer.id}"
+                        th:value="${answer.marksAwarded}">
+
+
+                    <label
+                        th:for="'feedback_' + ${answer.id}">
+
+                        Examiner Feedback
+
+                    </label>
+
+
+                    <textarea
+                        class="feedback-input"
+                        th:name="'feedback_' + ${answer.id}"
+                        placeholder="Enter feedback for the student..."
+                        th:text="${answer.feedback}">
+                    </textarea>
+
+                </div>
+
+
+            </div>
+
+
+            <!-- ================= BUTTONS ================= -->
+
+            <div class="button-area">
+
+                <button
+                    type="submit"
+                    class="save-button">
+
+                    Save Evaluation
+
+                </button>
+
+
+                <a
+                    href="/examiner/evaluate"
+                    class="back-button">
+
+                    Back to Submissions
+
+                </a>
+
+            </div>
+
+
+        </form>
+
+    </div>
+
+</body>
+
+</html>

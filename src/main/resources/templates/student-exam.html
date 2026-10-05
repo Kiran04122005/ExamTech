@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title th:text="${exam.title} + ' - ExamTech'">
+        ExamTech - Online Exam
+    </title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f4f7fb;
+            min-height: 100vh;
+        }
+
+        /* Navbar */
+
+        .navbar {
+            background: #2563eb;
+            color: white;
+            padding: 18px 40px;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 26px;
+            font-weight: bold;
+        }
+
+        /* Timer */
+
+        .timer {
+            background: #1d4ed8;
+            padding: 10px 20px;
+            border-radius: 8px;
+
+            font-size: 18px;
+            font-weight: bold;
+
+            transition: 0.3s;
+        }
+
+        .timer.warning {
+            background: #d97706;
+        }
+
+        .timer.danger {
+            background: #dc2626;
+            animation: timerPulse 1s infinite;
+        }
+
+        @keyframes timerPulse {
+
+            0% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.7;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        /* Main container */
+
+        .container {
+            max-width: 1000px;
+            margin: 35px auto;
+            padding: 0 20px;
+        }
+
+        /* Exam header */
+
+        .exam-header {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+
+            margin-bottom: 25px;
+        }
+
+        .exam-header h1 {
+            color: #1e3a8a;
+            margin-bottom: 10px;
+        }
+
+        .exam-header p {
+            color: #555;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .exam-info {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+
+            color: #333;
+        }
+
+        .exam-info strong {
+            color: #1e3a8a;
+        }
+
+        /* Question */
+
+        .question-card {
+            background: white;
+
+            padding: 25px;
+            margin-bottom: 20px;
+
+            border-radius: 12px;
+
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .question-number {
+            color: #2563eb;
+            font-size: 20px;
+            font-weight: bold;
+
+            margin-bottom: 12px;
+        }
+
+        .question-text {
+            font-size: 17px;
+            color: #222;
+
+            line-height: 1.6;
+
+            margin-bottom: 18px;
+        }
+
+        .question-marks {
+            color: #1e3a8a;
+            font-weight: bold;
+
+            margin-bottom: 18px;
+        }
+
+        /* MCQ */
+
+        .option {
+            display: block;
+
+            background: #f8fafc;
+
+            border: 1px solid #dbe3ef;
+
+            padding: 12px 15px;
+
+            margin-bottom: 10px;
+
+            border-radius: 7px;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+        }
+
+        .option:hover {
+            background: #eef4ff;
+        }
+
+        .option input {
+            margin-right: 10px;
+        }
+
+        /* Text answers */
+
+        textarea {
+            width: 100%;
+
+            min-height: 130px;
+
+            padding: 12px;
+
+            border: 1px solid #cbd5e1;
+
+            border-radius: 7px;
+
+            resize: vertical;
+
+            font-size: 15px;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #2563eb;
+        }
+
+        /* Submit */
+
+        .submit-section {
+            background: white;
+
+            padding: 25px;
+
+            border-radius: 12px;
+
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+
+            text-align: center;
+
+            margin-bottom: 40px;
+        }
+
+        .submit-button {
+            background: #2563eb;
+
+            color: white;
+
+            border: none;
+
+            padding: 13px 30px;
+
+            border-radius: 7px;
+
+            font-size: 16px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+        }
+
+        .submit-button:hover {
+            background: #1d4ed8;
+        }
+
+        /* Empty questions */
+
+        .empty-message {
+            background: white;
+
+            padding: 30px;
+
+            border-radius: 12px;
+
+            text-align: center;
+
+            color: #666;
+
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        /* Mobile */
+
+        @media (max-width: 700px) {
+
+            .navbar {
+                padding: 15px 20px;
+            }
+
+            .logo {
+                font-size: 22px;
+            }
+
+            .timer {
+                font-size: 15px;
+                padding: 8px 12px;
+            }
+
+            .exam-header,
+            .question-card,
+            .submit-section {
+                padding: 20px;
+            }
+
+            .exam-info {
+                flex-direction: column;
+                gap: 8px;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+    <!-- NAVBAR -->
+
+    <div class="navbar">
+
+        <div class="logo">
+            ExamTech
+        </div>
+
+        <div class="timer">
+
+            Time Left:
+
+            <span id="timer">
+                --:--
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <!-- MAIN -->
+
+    <div class="container">
+
+
+        <!-- EXAM INFORMATION -->
+
+        <div class="exam-header">
+
+            <h1 th:text="${exam.title}">
+                Java Programming
+            </h1>
+
+            <p th:text="${exam.description}">
+                Java fundamentals and object-oriented programming
+            </p>
+
+            <div class="exam-info">
+
+                <div>
+
+                    <strong>Duration:</strong>
+
+                    <span th:text="${exam.durationMinutes}">
+                        30
+                    </span>
+
+                    minutes
+
+                </div>
+
+
+                <div>
+
+                    <strong>Total Marks:</strong>
+
+                    <span th:text="${exam.totalMarks}">
+                        20
+                    </span>
+
+                </div>
+
+
+                <div>
+
+                    <strong>Status:</strong>
+
+                    <span>
+                        Active
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- EXAM FORM -->
+
+        <form id="examForm"
+              th:action="@{'/student/exam/' + ${exam.id} + '/submit'}"
+              method="post">
+
+
+            <!-- QUESTIONS EXIST -->
+
+            <div th:if="${questions != null and !questions.isEmpty()}">
+
+                <div th:each="question, questionStat : ${questions}"
+                     class="question-card">
+
+
+                    <!-- QUESTION NUMBER -->
+
+                    <div class="question-number">
+
+                        Question
+
+                        <span th:text="${questionStat.count}">
+                            1
+                        </span>
+
+                    </div>
+
+
+                    <!-- QUESTION TEXT -->
+
+                    <div class="question-text"
+                         th:text="${question.questionText}">
+
+                        Question text
+
+                    </div>
+
+
+                    <!-- MARKS -->
+
+                    <div class="question-marks">
+
+                        Marks:
+
+                        <span th:text="${question.marks}">
+                            2
+                        </span>
+
+                    </div>
+
+
+                    <!-- MCQ -->
+
+                    <div th:if="${question.type == 'MCQ'}">
+
+
+                        <label class="option">
+
+                            <input type="radio"
+                                   th:name="'answer_' + ${question.id}"
+                                   value="A">
+
+                            <span th:text="${question.optionA}">
+                                Option A
+                            </span>
+
+                        </label>
+
+
+                        <label class="option">
+
+                            <input type="radio"
+                                   th:name="'answer_' + ${question.id}"
+                                   value="B">
+
+                            <span th:text="${question.optionB}">
+                                Option B
+                            </span>
+
+                        </label>
+
+
+                        <label class="option">
+
+                            <input type="radio"
+                                   th:name="'answer_' + ${question.id}"
+                                   value="C">
+
+                            <span th:text="${question.optionC}">
+                                Option C
+                            </span>
+
+                        </label>
+
+
+                        <label class="option">
+
+                            <input type="radio"
+                                   th:name="'answer_' + ${question.id}"
+                                   value="D">
+
+                            <span th:text="${question.optionD}">
+                                Option D
+                            </span>
+
+                        </label>
+
+
+                    </div>
+
+
+                    <!-- SHORT ANSWER -->
+
+                    <div th:if="${question.type == 'SHORT_ANSWER'}">
+
+                        <textarea
+                            th:name="'answer_' + ${question.id}"
+                            placeholder="Enter your answer here..."></textarea>
+
+                    </div>
+
+
+                    <!-- ESSAY -->
+
+                    <div th:if="${question.type == 'ESSAY'}">
+
+                        <textarea
+                            th:name="'answer_' + ${question.id}"
+                            style="min-height: 220px;"
+                            placeholder="Write your essay answer here..."></textarea>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+            <!-- NO QUESTIONS -->
+
+            <div th:if="${questions == null or questions.isEmpty()}"
+                 class="empty-message">
+
+                <h2>
+                    No questions available
+                </h2>
+
+                <p>
+                    The examiner has not added questions to this exam yet.
+                </p>
+
+            </div>
+
+
+            <!-- SUBMIT -->
+
+            <div th:if="${questions != null and !questions.isEmpty()}"
+                 class="submit-section">
+
+                <button type="submit"
+                        class="submit-button">
+
+                    Submit Exam
+
+                </button>
+
+            </div>
+
+
+        </form>
+
+    </div>
+
+
+    <!-- TIMER SCRIPT -->
+
+    <script th:inline="javascript">
+
+        /*
+         * Get exam duration from Spring Boot / Thymeleaf.
+         *
+         * If no value is supplied, 30 minutes is used
+         * as the fallback value.
+         */
+
+        const durationMinutes =
+            /*[[${exam.durationMinutes}]]*/ 30;
+
+
+        /*
+         * Convert minutes into seconds.
+         */
+
+        let totalSeconds = durationMinutes * 60;
+
+
+        /*
+         * Store timer interval.
+         */
+
+        let timerInterval;
+
+
+        /*
+         * Prevent the form from being submitted twice.
+         */
+
+        let examSubmitted = false;
+
+
+        /*
+         * Update the timer display.
+         */
+
+        function updateTimer() {
+
+            const minutes =
+                Math.floor(totalSeconds / 60);
+
+            const seconds =
+                totalSeconds % 60;
+
+
+            const timerElement =
+                document.getElementById("timer");
+
+
+            const timerContainer =
+                document.querySelector(".timer");
+
+
+            /*
+             * Display time in MM:SS format.
+             */
+
+            timerElement.textContent =
+                String(minutes).padStart(2, "0")
+                + ":"
+                + String(seconds).padStart(2, "0");
+
+
+            /*
+             * -----------------------------------------
+             * 5 MINUTE WARNING
+             * -----------------------------------------
+             */
+
+            if (totalSeconds <= 300 &&
+                totalSeconds > 60) {
+
+                timerContainer.classList.add("warning");
+
+                timerContainer.classList.remove("danger");
+
+            }
+
+
+            /*
+             * -----------------------------------------
+             * 1 MINUTE WARNING
+             * -----------------------------------------
+             */
+
+            if (totalSeconds <= 60 &&
+                totalSeconds > 0) {
+
+                timerContainer.classList.remove("warning");
+
+                timerContainer.classList.add("danger");
+
+            }
+
+
+            /*
+             * -----------------------------------------
+             * TIME OVER
+             * -----------------------------------------
+             */
+
+            if (totalSeconds <= 0) {
+
+                clearInterval(timerInterval);
+
+
+                /*
+                 * Make sure automatic submission
+                 * happens only once.
+                 */
+
+                if (!examSubmitted) {
+
+                    examSubmitted = true;
+
+
+                    alert(
+                        "Time is over. Your exam will be submitted automatically."
+                    );
+
+
+                    document
+                        .getElementById("examForm")
+                        .submit();
+
+                }
+
+
+                return;
+            }
+
+
+            /*
+             * Reduce timer by one second.
+             */
+
+            totalSeconds--;
+
+        }
+
+
+        /*
+         * Display timer immediately
+         * instead of waiting one second.
+         */
+
+        updateTimer();
+
+
+        /*
+         * Update timer every second.
+         */
+
+        timerInterval =
+            setInterval(updateTimer, 1000);
+
+
+        /*
+         * -----------------------------------------
+         * MANUAL SUBMISSION
+         * -----------------------------------------
+         */
+
+        document
+            .getElementById("examForm")
+            .addEventListener("submit", function(event) {
+
+
+                /*
+                 * If the exam was already submitted
+                 * automatically, do not show confirmation.
+                 */
+
+                if (examSubmitted) {
+
+                    return;
+
+                }
+
+
+                /*
+                 * Ask the student for confirmation.
+                 */
+
+                const confirmed =
+                    confirm(
+                        "Are you sure you want to submit the exam?"
+                    );
+
+
+                /*
+                 * If student selects Cancel,
+                 * stop form submission.
+                 */
+
+                if (!confirmed) {
+
+                    event.preventDefault();
+
+                    return;
+
+                }
+
+
+                /*
+                 * Mark exam as submitted.
+                 */
+
+                examSubmitted = true;
+
+
+                /*
+                 * Stop countdown.
+                 */
+
+                clearInterval(timerInterval);
+
+            });
+
+    </script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Reuse Question - ExamTech</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f4f7fb;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: #2563eb;
+            color: white;
+
+            padding: 18px 40px;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 26px;
+            font-weight: bold;
+        }
+
+        .back-link {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        .container {
+            max-width: 800px;
+
+            margin: 40px auto;
+
+            padding: 0 20px;
+        }
+
+        .card {
+            background: white;
+
+            padding: 35px;
+
+            border-radius: 12px;
+
+            box-shadow:
+                0 4px 15px
+                rgba(0, 0, 0, 0.08);
+        }
+
+        h1 {
+            color: #1e3a8a;
+
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+
+            margin-bottom: 25px;
+        }
+
+        .question-preview {
+            background: #f8fafc;
+
+            border: 1px solid #dbe3ef;
+
+            padding: 20px;
+
+            border-radius: 8px;
+
+            margin-bottom: 25px;
+        }
+
+        .question-preview h2 {
+            color: #2563eb;
+
+            font-size: 18px;
+
+            margin-bottom: 12px;
+        }
+
+        .question-text {
+            font-size: 17px;
+
+            color: #222;
+
+            line-height: 1.5;
+
+            margin-bottom: 12px;
+        }
+
+        .details {
+            color: #555;
+
+            line-height: 1.8;
+        }
+
+        .details strong {
+            color: #1e3a8a;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+
+            color: #1e3a8a;
+
+            font-weight: bold;
+
+            margin-bottom: 8px;
+        }
+
+        .form-group select {
+            width: 100%;
+
+            padding: 12px;
+
+            border: 1px solid #cbd5e1;
+
+            border-radius: 7px;
+
+            font-size: 15px;
+
+            background: white;
+        }
+
+        .form-group select:focus {
+            outline: none;
+
+            border-color: #2563eb;
+        }
+
+        .error-message {
+            background: #fee2e2;
+
+            border: 1px solid #fca5a5;
+
+            color: #991b1b;
+
+            padding: 15px;
+
+            border-radius: 7px;
+
+            margin-bottom: 20px;
+        }
+
+        .button-section {
+            display: flex;
+
+            gap: 15px;
+
+            margin-top: 25px;
+        }
+
+        .reuse-button {
+            background: #2563eb;
+
+            color: white;
+
+            border: none;
+
+            padding: 13px 28px;
+
+            border-radius: 7px;
+
+            font-size: 16px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+        }
+
+        .reuse-button:hover {
+            background: #1d4ed8;
+        }
+
+        .cancel-button {
+            background: #64748b;
+
+            color: white;
+
+            text-decoration: none;
+
+            padding: 13px 28px;
+
+            border-radius: 7px;
+
+            font-size: 16px;
+
+            font-weight: bold;
+        }
+
+        .cancel-button:hover {
+            background: #475569;
+        }
+
+        @media (max-width: 700px) {
+
+            .navbar {
+                padding: 15px 20px;
+            }
+
+            .logo {
+                font-size: 22px;
+            }
+
+            .card {
+                padding: 25px 20px;
+            }
+
+            .button-section {
+                flex-direction: column;
+            }
+
+            .reuse-button,
+            .cancel-button {
+                width: 100%;
+
+                text-align: center;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+    <!-- NAVBAR -->
+
+    <div class="navbar">
+
+        <div class="logo">
+            ExamTech
+        </div>
+
+        <a href="/examiner/questions"
+           class="back-link">
+
+            Back to Question Bank
+
+        </a>
+
+    </div>
+
+
+    <!-- MAIN -->
+
+    <div class="container">
+
+        <div class="card">
+
+            <h1>
+                Reuse Question
+            </h1>
+
+            <p class="subtitle">
+
+                Add a copy of this question
+                to another examination.
+
+            </p>
+
+
+            <!-- ERROR -->
+
+            <div th:if="${error}"
+                 class="error-message">
+
+                <strong>
+                    Cannot Reuse Question
+                </strong>
+
+                <p th:text="${error}">
+                    Error message
+                </p>
+
+            </div>
+
+
+            <!-- QUESTION PREVIEW -->
+
+            <div class="question-preview">
+
+                <h2>
+                    Question Preview
+                </h2>
+
+                <div class="question-text"
+                     th:text="${question.questionText}">
+
+                    Question text
+
+                </div>
+
+                <div class="details">
+
+                    <div>
+
+                        <strong>Type:</strong>
+
+                        <span th:text="${question.type}">
+                            MCQ
+                        </span>
+
+                    </div>
+
+                    <div>
+
+                        <strong>Marks:</strong>
+
+                        <span th:text="${question.marks}">
+                            2
+                        </span>
+
+                    </div>
+
+                    <div th:if="${question.exam != null}">
+
+                        <strong>Current Exam:</strong>
+
+                        <span th:text="${question.exam.title}">
+                            Java Programming
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- REUSE FORM -->
+
+            <form th:action="@{'/examiner/questions/reuse/' + ${question.id}}"
+                  method="post">
+
+
+                <div class="form-group">
+
+                    <label for="targetExamId">
+
+                        Select Target Examination
+
+                    </label>
+
+                    <select id="targetExamId"
+                            name="targetExamId"
+                            required>
+
+                        <option value="">
+
+                            -- Select an examination --
+
+                        </option>
+
+                        <option th:each="exam : ${exams}"
+                                th:value="${exam.id}"
+                                th:text="${exam.title}">
+
+                            Java Programming
+
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="button-section">
+
+                    <button type="submit"
+                            class="reuse-button">
+
+                        Reuse Question
+
+                    </button>
+
+                    <a href="/examiner/questions"
+                       class="cancel-button">
+
+                        Cancel
+
+                    </a>
+
+                </div>
+
+
+            </form>
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>ExamTech - Evaluate Answers</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f4f7fb;
+            min-height: 100vh;
+        }
+
+        /* ================= NAVBAR ================= */
+
+        .navbar {
+            background: #2563eb;
+            color: white;
+            padding: 18px 40px;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .nav-button {
+            background: #1d4ed8;
+            color: white;
+            text-decoration: none;
+
+            padding: 10px 20px;
+            border-radius: 7px;
+        }
+
+        .nav-button:hover {
+            background: #1e40af;
+        }
+
+        /* ================= CONTAINER ================= */
+
+        .container {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        /* ================= HEADER ================= */
+
+        .page-header {
+            background: white;
+            padding: 30px;
+
+            border-radius: 15px;
+
+            box-shadow:
+                0 5px 15px rgba(0, 0, 0, 0.08);
+
+            margin-bottom: 30px;
+        }
+
+        .page-header h1 {
+            color: #1e3a8a;
+            margin-bottom: 10px;
+        }
+
+        .page-header p {
+            color: #555;
+            line-height: 1.6;
+        }
+
+        /* ================= RESULT CARD ================= */
+
+        .result-card {
+            background: white;
+
+            padding: 25px;
+
+            border-radius: 15px;
+
+            box-shadow:
+                0 5px 15px rgba(0, 0, 0, 0.08);
+
+            margin-bottom: 20px;
+
+            border-left: 5px solid #2563eb;
+        }
+
+        .result-card h2 {
+            color: #2563eb;
+            margin-bottom: 20px;
+        }
+
+        /* ================= DETAILS ================= */
+
+        .details {
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, 1fr);
+
+            gap: 15px;
+
+            margin-bottom: 20px;
+        }
+
+        .detail-box {
+            background: #f4f7fb;
+
+            padding: 15px;
+
+            border-radius: 8px;
+        }
+
+        .detail-box strong {
+            display: block;
+
+            color: #1e3a8a;
+
+            margin-bottom: 7px;
+        }
+
+        .detail-box span {
+            color: #444;
+        }
+
+        /* ================= STATUS ================= */
+
+        .status {
+            display: inline-block;
+
+            padding: 8px 15px;
+
+            border-radius: 20px;
+
+            font-weight: bold;
+        }
+
+        .pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .evaluated {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        /* ================= EVALUATE BUTTON ================= */
+
+        .evaluate-button {
+            display: inline-block;
+
+            background: #2563eb;
+
+            color: white;
+
+            text-decoration: none;
+
+            padding: 11px 22px;
+
+            border-radius: 7px;
+
+            font-weight: bold;
+        }
+
+        .evaluate-button:hover {
+            background: #1d4ed8;
+        }
+
+        /* ================= EMPTY ================= */
+
+        .empty {
+            background: white;
+
+            padding: 40px;
+
+            border-radius: 15px;
+
+            text-align: center;
+
+            box-shadow:
+                0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .empty h2 {
+            color: #1e3a8a;
+
+            margin-bottom: 10px;
+        }
+
+        .empty p {
+            color: #666;
+        }
+
+        /* ================= MOBILE ================= */
+
+        @media (max-width: 800px) {
+
+            .details {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .navbar {
+                padding: 15px 20px;
+            }
+
+        }
+
+        @media (max-width: 500px) {
+
+            .details {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                margin: 25px auto;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+    <!-- ================= NAVBAR ================= -->
+
+    <div class="navbar">
+
+        <div class="logo">
+            ExamTech
+        </div>
+
+        <div class="nav-buttons">
+
+            <a href="/examiner/dashboard"
+               class="nav-button">
+
+                Dashboard
+
+            </a>
+
+            <a href="/logout"
+               class="nav-button">
+
+                Logout
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= MAIN ================= -->
+
+    <div class="container">
+
+
+        <!-- PAGE HEADER -->
+
+        <div class="page-header">
+
+            <h1>
+                Evaluate Candidate Answers
+            </h1>
+
+            <p>
+                Review submitted examinations and
+                evaluate short-answer and essay responses.
+            </p>
+
+        </div>
+
+
+        <!-- ================= RESULTS ================= -->
+
+        <div th:if="${results != null and !results.isEmpty()}">
+
+            <div class="result-card"
+                 th:each="result : ${results}">
+
+                <h2
+                    th:text="${result.exam.title}">
+                    Java Programming
+                </h2>
+
+
+                <!-- DETAILS -->
+
+                <div class="details">
+
+                    <div class="detail-box">
+
+                        <strong>
+                            Student
+                        </strong>
+
+                        <span
+                            th:text="${result.studentName}">
+                            Student Name
+                        </span>
+
+                    </div>
+
+
+                    <div class="detail-box">
+
+                        <strong>
+                            Objective Marks
+                        </strong>
+
+                        <span
+                            th:text="${result.objectiveMarks}">
+                            2
+                        </span>
+
+                    </div>
+
+
+                    <div class="detail-box">
+
+                        <strong>
+                            Marks Obtained
+                        </strong>
+
+                        <span
+                            th:text="${result.totalMarksObtained}">
+                            2
+                        </span>
+
+                    </div>
+
+
+                    <div class="detail-box">
+
+                        <strong>
+                            Maximum Marks
+                        </strong>
+
+                        <span
+                            th:text="${result.maximumMarks}">
+                            20
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- STATUS -->
+
+                <div style="margin-bottom:20px;">
+
+                    <strong>
+                        Evaluation Status:
+                    </strong>
+
+                    <span
+                        class="status pending"
+                        th:if="${result.status == 'Pending Evaluation'}">
+
+                        Pending Evaluation
+
+                    </span>
+
+                    <span
+                        class="status evaluated"
+                        th:unless="${result.status == 'Pending Evaluation'}"
+                        th:text="${result.status}">
+
+                        Evaluated
+
+                    </span>
+
+                </div>
+
+
+                <!-- EVALUATE -->
+
+                <a
+                    th:href="@{/examiner/evaluate/{id}(id=${result.id})}"
+                    class="evaluate-button">
+
+                    Review & Evaluate
+
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================= NO RESULTS ================= -->
+
+        <div class="empty"
+             th:if="${results == null or results.isEmpty()}">
+
+            <h2>
+                No Submitted Exams
+            </h2>
+
+            <p>
+                There are currently no candidate
+                submissions available for evaluation.
+            </p>
+
+        </div>
+
+
+    </div>
+
+</body>
+
+</html>

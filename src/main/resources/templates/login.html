@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ExamTech - Login</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            min-height: 100vh;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .login-container {
+            width: 400px;
+            background: white;
+            padding: 35px;
+
+            border-radius: 12px;
+
+            box-shadow:
+                0 8px 25px rgba(0, 0, 0, 0.12);
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 10px;
+
+            color: #2563eb;
+
+            font-size: 32px;
+            font-weight: bold;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #333;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+
+            color: #333;
+            font-weight: bold;
+        }
+
+        input,
+        select {
+            width: 100%;
+
+            padding: 12px;
+
+            margin-bottom: 18px;
+
+            border: 1px solid #ccc;
+            border-radius: 6px;
+
+            font-size: 15px;
+
+            background: white;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: #2563eb;
+            outline: none;
+        }
+
+        select {
+            cursor: pointer;
+        }
+
+        button {
+            width: 100%;
+
+            padding: 12px;
+
+            background: #2563eb;
+            color: white;
+
+            border: none;
+            border-radius: 6px;
+
+            font-size: 16px;
+
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        .error {
+            background: #fee2e2;
+            color: #b91c1c;
+
+            padding: 10px;
+
+            border-radius: 6px;
+
+            margin-bottom: 15px;
+
+            text-align: center;
+        }
+
+        .register-link {
+            text-align: center;
+
+            margin-top: 20px;
+
+            color: #555;
+        }
+
+        .register-link a {
+            color: #2563eb;
+
+            text-decoration: none;
+
+            font-weight: bold;
+        }
+
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <div class="login-container">
+
+        <div class="logo">
+            ExamTech
+        </div>
+
+        <h2>
+            Online Exam Portal
+        </h2>
+
+
+        <!-- Error Message -->
+
+        <div th:if="${error}"
+             class="error">
+
+            <span th:text="${error}"></span>
+
+        </div>
+
+
+        <!-- Login Form -->
+
+        <form action="/login"
+              method="post"
+              autocomplete="off">
+
+            <!-- Login Role -->
+
+            <label for="role">
+                Login As
+            </label>
+
+            <select id="role"
+                    name="role"
+                    autocomplete="off"
+                    required>
+
+                <option value=""
+                        disabled
+                        selected>
+
+                    Select Login Type
+
+                </option>
+
+                <option value="STUDENT">
+                    Student
+                </option>
+
+                <option value="EXAMINER">
+                    Examiner
+                </option>
+
+            </select>
+
+
+            <!-- Email -->
+
+            <label for="email">
+                Email
+            </label>
+
+            <input type="email"
+                   id="email"
+                   name="email"
+
+                   placeholder="Enter your email"
+
+                   autocomplete="new-password"
+
+                   readonly
+
+                   required>
+
+
+            <!-- Password -->
+
+            <label for="password">
+                Password
+            </label>
+
+            <input type="password"
+                   id="password"
+                   name="password"
+
+                   placeholder="Enter your password"
+
+                   autocomplete="new-password"
+
+                   readonly
+
+                   required>
+
+
+            <!-- Login Button -->
+
+            <button type="submit">
+                Login
+            </button>
+
+        </form>
+
+
+        <!-- Registration -->
+
+        <div class="register-link">
+
+            Don't have an account?
+
+            <a href="/register">
+                Register here
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- Prevent Browser Autofill -->
+
+    <script>
+
+        window.addEventListener("pageshow", function () {
+
+            const email =
+                document.getElementById("email");
+
+            const password =
+                document.getElementById("password");
+
+
+            /*
+             * Keep fields readonly when page loads.
+             * This prevents Edge from automatically
+             * inserting saved login credentials.
+             */
+
+            if (email) {
+
+                email.value = "";
+
+                email.setAttribute(
+                    "readonly",
+                    "readonly"
+                );
+
+            }
+
+
+            if (password) {
+
+                password.value = "";
+
+                password.setAttribute(
+                    "readonly",
+                    "readonly"
+                );
+
+            }
+
+        });
+
+
+        /*
+         * When the user clicks the Email field,
+         * allow typing.
+         */
+
+        document.getElementById("email")
+            .addEventListener("focus", function () {
+
+                this.removeAttribute("readonly");
+
+            });
+
+
+        /*
+         * When the user clicks the Password field,
+         * allow typing.
+         */
+
+        document.getElementById("password")
+            .addEventListener("focus", function () {
+
+                this.removeAttribute("readonly");
+
+            });
+
+    </script>
+
+</body>
+
+</html>

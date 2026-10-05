@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>ExamTech - My Results</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f4f7fb;
+            min-height: 100vh;
+        }
+
+        /* Navigation Bar */
+
+        .navbar {
+            background: #2563eb;
+            color: white;
+            padding: 18px 40px;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 26px;
+            font-weight: bold;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .nav-button {
+            color: white;
+            text-decoration: none;
+            background: #1d4ed8;
+
+            padding: 10px 18px;
+            border-radius: 6px;
+        }
+
+        /* Main Container */
+
+        .container {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+
+        .page-header {
+            background: white;
+            padding: 30px;
+
+            border-radius: 12px;
+
+            box-shadow:
+                0 4px 15px rgba(0, 0, 0, 0.08);
+
+            margin-bottom: 30px;
+        }
+
+        .page-header h1 {
+            color: #1e3a8a;
+            margin-bottom: 10px;
+        }
+
+        .page-header p {
+            color: #555;
+            font-size: 16px;
+        }
+
+        /* Result Card */
+
+        .result-card {
+            background: white;
+
+            padding: 25px;
+
+            border-radius: 12px;
+
+            box-shadow:
+                0 4px 15px rgba(0, 0, 0, 0.08);
+
+            margin-bottom: 25px;
+
+            border-left: 5px solid #2563eb;
+        }
+
+        .result-card h2 {
+            color: #2563eb;
+            margin-bottom: 20px;
+        }
+
+        /* Result Information */
+
+        .result-info {
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 15px;
+        }
+
+        .info-box {
+            background: #f4f7fb;
+
+            padding: 18px;
+
+            border-radius: 8px;
+        }
+
+        .info-box strong {
+            display: block;
+
+            color: #1e3a8a;
+
+            margin-bottom: 7px;
+        }
+
+        .info-box span {
+            color: #555;
+
+            font-size: 16px;
+        }
+
+        /* Status */
+
+        .status {
+            display: inline-block;
+
+            padding: 6px 12px;
+
+            border-radius: 20px;
+
+            font-weight: bold;
+        }
+
+        .status-completed {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .status-pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        /* Marks */
+
+        .marks-section {
+            margin-top: 20px;
+
+            padding: 20px;
+
+            background: #eff6ff;
+
+            border-radius: 8px;
+        }
+
+        .marks-section h3 {
+            color: #1e3a8a;
+
+            margin-bottom: 15px;
+        }
+
+        .marks {
+            font-size: 26px;
+
+            font-weight: bold;
+
+            color: #2563eb;
+        }
+
+        /* Question-wise Evaluation */
+
+        .answers-section {
+            margin-top: 25px;
+        }
+
+        .answers-section h3 {
+            color: #1e3a8a;
+            margin-bottom: 15px;
+        }
+
+        .answer-card {
+            background: #f8fafc;
+
+            border: 1px solid #dbe3ef;
+
+            border-radius: 10px;
+
+            padding: 20px;
+
+            margin-bottom: 15px;
+        }
+
+        .question-number {
+            color: #2563eb;
+
+            font-size: 18px;
+
+            font-weight: bold;
+
+            margin-bottom: 10px;
+        }
+
+        .question-text {
+            color: #222;
+
+            font-size: 16px;
+
+            line-height: 1.5;
+
+            margin-bottom: 10px;
+        }
+
+        .question-type {
+            color: #666;
+
+            font-size: 14px;
+
+            margin-bottom: 15px;
+        }
+
+        .student-answer {
+            background: white;
+
+            border-left: 4px solid #2563eb;
+
+            padding: 15px;
+
+            border-radius: 6px;
+
+            margin-bottom: 12px;
+        }
+
+        .student-answer strong {
+            display: block;
+
+            color: #1e3a8a;
+
+            margin-bottom: 8px;
+        }
+
+        .student-answer p {
+            color: #444;
+
+            line-height: 1.5;
+
+            white-space: pre-wrap;
+        }
+
+        /* Marks and Feedback */
+
+        .evaluation-box {
+            background: #ecfdf5;
+
+            border: 1px solid #bbf7d0;
+
+            padding: 15px;
+
+            border-radius: 8px;
+        }
+
+        .evaluation-box strong {
+            color: #166534;
+        }
+
+        .marks-awarded {
+            margin-top: 8px;
+
+            color: #166534;
+
+            font-size: 17px;
+
+            font-weight: bold;
+        }
+
+        .feedback {
+            margin-top: 12px;
+
+            padding-top: 12px;
+
+            border-top: 1px solid #bbf7d0;
+        }
+
+        .feedback-title {
+            display: block;
+
+            color: #166534;
+
+            margin-bottom: 6px;
+
+            font-weight: bold;
+        }
+
+        .feedback p {
+            color: #444;
+
+            line-height: 1.5;
+
+            white-space: pre-wrap;
+        }
+
+        /* Pending Evaluation */
+
+        .pending-box {
+            background: #fff7ed;
+
+            border: 1px solid #fed7aa;
+
+            padding: 15px;
+
+            border-radius: 8px;
+
+            color: #9a3412;
+        }
+
+        /* No Answers */
+
+        .no-answers {
+            background: #f8fafc;
+
+            border: 1px solid #dbe3ef;
+
+            padding: 20px;
+
+            border-radius: 8px;
+
+            color: #666;
+
+            text-align: center;
+        }
+
+        /* No Results */
+
+        .no-results {
+            background: white;
+
+            padding: 40px;
+
+            text-align: center;
+
+            border-radius: 12px;
+
+            box-shadow:
+                0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .no-results h2 {
+            color: #1e3a8a;
+
+            margin-bottom: 10px;
+        }
+
+        .no-results p {
+            color: #666;
+        }
+
+        /* Responsive */
+
+        @media (max-width: 800px) {
+
+            .result-info {
+                grid-template-columns: 1fr;
+            }
+
+            .navbar {
+                padding: 18px 20px;
+            }
+
+            .container {
+                margin-top: 25px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- Navigation Bar -->
+
+    <div class="navbar">
+
+        <div class="logo">
+            ExamTech
+        </div>
+
+        <div class="nav-buttons">
+
+            <a href="/student/dashboard"
+               class="nav-button">
+                Dashboard
+            </a>
+
+            <a href="/logout"
+               class="nav-button">
+                Logout
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- Main Content -->
+
+    <div class="container">
+
+
+        <!-- Page Header -->
+
+        <div class="page-header">
+
+            <h1>
+                My Results
+            </h1>
+
+            <p>
+                View your completed examinations,
+                marks, and evaluation status.
+            </p>
+
+        </div>
+
+
+        <!-- Results Available -->
+
+        <div th:if="${results != null and !results.isEmpty()}">
+
+
+            <!-- Result Card -->
+
+            <div class="result-card"
+                 th:each="result : ${results}">
+
+
+                <!-- Exam Name -->
+
+                <h2
+                    th:text="${result.exam.title}">
+                    Exam Name
+                </h2>
+
+
+                <!-- Result Information -->
+
+                <div class="result-info">
+
+
+                    <!-- Objective Marks -->
+
+                    <div class="info-box">
+
+                        <strong>
+                            Objective Marks
+                        </strong>
+
+                        <span
+                            th:text="${result.objectiveMarks != null ? result.objectiveMarks : 0}">
+                            0
+                        </span>
+
+                    </div>
+
+
+                    <!-- Total Marks -->
+
+                    <div class="info-box">
+
+                        <strong>
+                            Total Marks Obtained
+                        </strong>
+
+                        <span
+                            th:text="${result.totalMarksObtained != null ? result.totalMarksObtained : 0}">
+                            0
+                        </span>
+
+                    </div>
+
+
+                    <!-- Maximum Marks -->
+
+                    <div class="info-box">
+
+                        <strong>
+                            Maximum Marks
+                        </strong>
+
+                        <span
+                            th:text="${result.maximumMarks != null ? result.maximumMarks : 0}">
+                            0
+                        </span>
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- Status -->
+
+                <div class="marks-section">
+
+                    <h3>
+                        Result Status
+                    </h3>
+
+                    <span
+                        class="status"
+                        th:classappend="${result.status == 'Completed'} ? ' status-completed' : ' status-pending'"
+                        th:text="${result.status != null ? result.status : 'Evaluation Pending'}">
+
+                        Completed
+
+                    </span>
+
+                </div>
+
+
+                <!-- Evaluation Information -->
+
+                <div class="marks-section">
+
+                    <h3>
+                        Evaluation Information
+                    </h3>
+
+                    <p>
+                        Objective questions are automatically
+                        evaluated by ExamTech.
+                    </p>
+
+                    <p style="margin-top: 8px;">
+
+                        Short-answer and essay questions
+                        are evaluated by the examiner.
+
+                    </p>
+
+                </div>
+
+
+                <!-- ================================================= -->
+                <!-- QUESTION-WISE ANSWERS -->
+                <!-- ================================================= -->
+
+                <div class="answers-section">
+
+                    <h3>
+                        Question-wise Evaluation
+                    </h3>
+
+
+                    <!-- Answers Available -->
+
+                    <div
+                        th:if="${answersByResult[result.id] != null and !answersByResult[result.id].isEmpty()}">
+
+
+                        <div
+                            class="answer-card"
+                            th:each="answer, answerStat : ${answersByResult[result.id]}">
+
+
+                            <!-- Question Number -->
+
+                            <div class="question-number">
+
+                                Question
+                                <span
+                                    th:text="${answerStat.count}">
+                                    1
+                                </span>
+
+                            </div>
+
+
+                            <!-- Question -->
+
+                            <div class="question-text">
+
+                                <strong>
+                                    Question:
+                                </strong>
+
+                                <span
+                                    th:text="${answer.question.questionText}">
+                                    Question text
+                                </span>
+
+                            </div>
+
+
+                            <!-- Question Type -->
+
+                            <div class="question-type">
+
+                                Type:
+                                <strong
+                                    th:text="${answer.question.type}">
+                                    MCQ
+                                </strong>
+
+                                &nbsp; | &nbsp;
+
+                                Maximum Marks:
+                                <strong
+                                    th:text="${answer.question.marks}">
+                                    2
+                                </strong>
+
+                            </div>
+
+
+                            <!-- Student Answer -->
+
+                            <div class="student-answer">
+
+                                <strong>
+                                    Your Answer
+                                </strong>
+
+                                <p
+                                    th:if="${answer.studentAnswer != null and !answer.studentAnswer.isEmpty()}"
+                                    th:text="${answer.studentAnswer}">
+
+                                    Student answer
+
+                                </p>
+
+                                <p
+                                    th:if="${answer.studentAnswer == null or answer.studentAnswer.isEmpty()}">
+
+                                    No answer submitted.
+
+                                </p>
+
+                            </div>
+
+
+                            <!-- Automatically Evaluated MCQ -->
+
+                            <div
+                                class="evaluation-box"
+                                th:if="${answer.question.type == 'MCQ'}">
+
+                                <strong>
+                                    Automatically Evaluated
+                                </strong>
+
+                                <div class="marks-awarded">
+
+                                    Marks Awarded:
+
+                                    <span
+                                        th:text="${answer.marksAwarded != null ? answer.marksAwarded : 0}">
+                                        0
+                                    </span>
+
+                                    /
+
+                                    <span
+                                        th:text="${answer.question.marks}">
+                                        2
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- Manually Evaluated Questions -->
+
+                            <div
+                                class="evaluation-box"
+                                th:if="${answer.question.type != 'MCQ'}">
+
+                                <strong>
+                                    Examiner Evaluation
+                                </strong>
+
+
+                                <div class="marks-awarded">
+
+                                    Marks Awarded:
+
+                                    <span
+                                        th:text="${answer.marksAwarded != null ? answer.marksAwarded : 0}">
+                                        0
+                                    </span>
+
+                                    /
+
+                                    <span
+                                        th:text="${answer.question.marks}">
+                                        5
+                                    </span>
+
+                                </div>
+
+
+                                <!-- Feedback -->
+
+                                <div class="feedback">
+
+                                    <span class="feedback-title">
+
+                                        Examiner Feedback
+
+                                    </span>
+
+                                    <p
+                                        th:if="${answer.feedback != null and !answer.feedback.isEmpty()}"
+                                        th:text="${answer.feedback}">
+
+                                        Examiner feedback
+
+                                    </p>
+
+                                    <p
+                                        th:if="${answer.feedback == null or answer.feedback.isEmpty()}">
+
+                                        No feedback provided yet.
+
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+
+                        </div>
+
+
+                    </div>
+
+
+                    <!-- No Answers -->
+
+                    <div
+                        class="no-answers"
+                        th:if="${answersByResult[result.id] == null or answersByResult[result.id].isEmpty()}">
+
+                        Question-wise answer details are not available
+                        for this examination.
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+        <!-- No Results -->
+
+        <div class="no-results"
+             th:if="${results == null or results.isEmpty()}">
+
+            <h2>
+                No Results Available
+            </h2>
+
+            <p>
+                You have not completed any examinations yet.
+            </p>
+
+        </div>
+
+
+    </div>
+
+
+</body>
+
+</html>

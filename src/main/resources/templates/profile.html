@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>ExamTech - My Profile</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f4f7fb;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: #2563eb;
+            color: white;
+            padding: 18px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .nav-button {
+            color: white;
+            text-decoration: none;
+            background: #1d4ed8;
+            padding: 10px 20px;
+            border-radius: 7px;
+        }
+
+        .nav-button:hover {
+            background: #1e40af;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .profile-card {
+            background: white;
+            padding: 35px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        h1 {
+            color: #1e3a8a;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .profile-item {
+            background: #f4f7fb;
+            padding: 18px;
+            border-radius: 8px;
+            margin-bottom: 18px;
+        }
+
+        .profile-item strong {
+            display: block;
+            color: #1e3a8a;
+            margin-bottom: 7px;
+        }
+
+        .profile-item span {
+            color: #333;
+            font-size: 16px;
+        }
+
+        .actions {
+            margin-top: 25px;
+            display: flex;
+            gap: 15px;
+        }
+
+        .button {
+            display: inline-block;
+            background: #2563eb;
+            color: white;
+            text-decoration: none;
+            padding: 11px 22px;
+            border-radius: 7px;
+            font-weight: bold;
+        }
+
+        .button:hover {
+            background: #1d4ed8;
+        }
+
+        .back-button {
+            background: #64748b;
+        }
+
+        .back-button:hover {
+            background: #475569;
+        }
+
+        @media (max-width: 600px) {
+
+            .navbar {
+                padding: 15px 20px;
+            }
+
+            .logo {
+                font-size: 23px;
+            }
+
+            .container {
+                margin: 25px auto;
+            }
+
+            .profile-card {
+                padding: 25px 20px;
+            }
+
+            .actions {
+                flex-direction: column;
+            }
+
+            .button {
+                text-align: center;
+            }
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <div class="navbar">
+
+        <div class="logo">
+            ExamTech
+        </div>
+
+        <div class="nav-buttons">
+
+            <a href="/student/dashboard"
+               class="nav-button">
+                Dashboard
+            </a>
+
+            <a href="/logout"
+               class="nav-button">
+                Logout
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <div class="container">
+
+        <div class="profile-card">
+
+            <h1>My Profile</h1>
+
+            <p class="subtitle">
+                View your registered account information.
+            </p>
+
+
+            <div class="profile-item">
+
+                <strong>Name</strong>
+
+                <span th:text="${user.name}">
+                    Student Name
+                </span>
+
+            </div>
+
+
+            <div class="profile-item">
+
+                <strong>Email</strong>
+
+                <span th:text="${user.email}">
+                    student@example.com
+                </span>
+
+            </div>
+
+
+            <div class="profile-item">
+
+                <strong>Role</strong>
+
+                <span th:text="${user.role}">
+                    STUDENT
+                </span>
+
+            </div>
+
+
+            <div class="actions">
+
+                <a href="/student/profile/edit"
+                   class="button">
+                    Edit Profile
+                </a>
+
+                <a href="/student/dashboard"
+                   class="button back-button">
+                    Back to Dashboard
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>
